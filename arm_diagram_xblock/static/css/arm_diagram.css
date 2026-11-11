@@ -340,10 +340,10 @@
 
 /* Service Item (ARM Orange Circle / Pill with Port) */
 .arm-service-item {
-    background: #431407;
+    background: #2a1205;
     border: 1.5px solid #ea580c;
     color: #ffedd5;
-    padding: 5px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
     display: flex;
@@ -352,47 +352,64 @@
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.2);
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+    margin: 3px 0;
 }
 
 .arm-service-item:hover {
-    background: #7c2d12;
+    background: #431407;
     border-color: #f97316;
-    box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.5);
+}
+
+.arm-service-item-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.arm-service-circle-port {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ea580c;
+    border: 2px solid #fdba74;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 6px rgba(234, 88, 12, 0.6);
+}
+
+.arm-service-circle-port:hover {
+    background: #ffedd5;
+    border-color: #f97316;
+    transform: scale(1.35);
+    box-shadow: 0 0 10px #f97316;
+}
+
+.arm-service-name {
+    font-weight: 600;
+    color: #ffedd5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .arm-service-badge {
     background: #1c0a03;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.68rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #fb923c;
     border: 1px solid #9a3412;
-}
-
-.arm-service-port {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #ea580c;
-    border: 2px solid #fed7aa;
-    color: #ffffff;
-    font-size: 9px;
-    cursor: pointer;
-    margin-right: 6px;
-    transition: all 0.2s ease;
-}
-
-.arm-service-port:hover {
-    background: #ffedd5;
-    color: #ea580c;
-    border-color: #f97316;
-    transform: scale(1.3);
-    box-shadow: 0 0 8px #f97316;
+    flex-shrink: 0;
+    margin-left: 6px;
 }
 
 /* Data Object Item (ARM Yellow Hexagon) */
@@ -400,21 +417,39 @@
     background: #713f12;
     border: 1.5px solid #eab308;
     color: #fef08a;
-    padding: 6px 18px;
-    clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0% 50%);
+    padding: 7px 22px;
+    clip-path: polygon(14px 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 14px 100%, 0% 50%);
     font-size: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    margin: 2px 0;
+    margin: 4px 0;
+    box-sizing: border-box;
 }
 
 .arm-data-item:hover {
-    background: #a16207;
+    background: #854d0e;
     border-color: #fde047;
-    box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+    box-shadow: 0 0 12px rgba(234, 179, 8, 0.5);
+}
+
+.arm-data-name {
+    font-weight: 600;
+    color: #fef08a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.arm-data-class-tag {
+    color: #fef08a;
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0.9;
+    flex-shrink: 0;
+    margin-left: 8px;
 }
 
 /* Scope Badges */
@@ -472,28 +507,30 @@
 
 /* Dependency Connector Node (ARM Ocean Blue Parallelogram) */
 .arm-dep-badge {
-    background: #0369a1;
-    border: 2px solid #38bdf8;
-    color: #f0f9ff;
-    font-size: 0.75rem;
+    background: #0284c7;
+    border: 1.5px solid #38bdf8;
+    color: #ffffff;
+    font-size: 0.74rem;
     font-weight: 700;
-    padding: 4px 14px;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    padding: 6px 26px;
+    clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
     position: absolute;
     transform: translate(-50%, -50%);
     cursor: pointer;
     z-index: 15;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    width: max-content;
+    box-sizing: border-box;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
     transition: all 0.2s ease;
 }
 
 .arm-dep-badge:hover {
-    background: #0284c7;
+    background: #0369a1;
     border-color: #7dd3fc;
     color: #ffffff;
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
-    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.7);
+    transform: translate(-50%, -50%) scale(1.05);
 }
 
 /* Hint & Feedback Section */

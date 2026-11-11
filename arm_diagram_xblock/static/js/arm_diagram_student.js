@@ -1669,28 +1669,18 @@ function ARMDiagramStudentView(runtime, element, initData) {
             const isSelected = app.id === state.selectedAppId;
             const scopeClass = 'arm-app-scope-' + (app.scope || 'INTERNAL');
             
-            // Scope & Sourcing badge formatting
+            // Scope & Sourcing badge formatting (Clean text, no emojis)
             const scope = (app.scope || 'INTERNAL').toUpperCase();
             const sourcing = app.sourcing ? app.sourcing.toUpperCase() : (scope === 'INTERNAL' ? 'MAKE' : null);
-            
-            let scopeIcon = '📦';
-            let scopeLabel = `INTERNAL (${sourcing || 'MAKE'})`;
-
-            if (scope === 'EXTERNAL') {
-                scopeIcon = sourcing === 'BUY' ? '🛒' : (sourcing === 'MAKE' ? '🏢' : '☁️');
-                scopeLabel = sourcing ? `EXTERNAL (${sourcing})` : 'EXTERNAL (OTHER)';
-            } else if (scope === 'INFRASTRUCTURE') {
-                scopeIcon = '⚙️';
-                scopeLabel = sourcing ? `INFRASTRUCTURE (${sourcing})` : 'INFRASTRUCTURE';
-            }
+            const scopeLabel = sourcing ? `${scope} (${sourcing})` : scope;
 
             const $node = $(`
                 <div class="arm-app-node ${scopeClass} ${isSelected ? 'arm-selected' : ''}" data-id="${app.id}" style="left: ${app.x}px; top: ${app.y}px; width: ${app.width || 260}px;">
                     <div class="arm-app-header">
                         <div>
-                            <span class="arm-app-scope-badge ${scope}">${scopeIcon} ${scopeLabel}</span>
+                            <span class="arm-app-scope-badge ${scope}">${scopeLabel}</span>
                             <div class="arm-app-title" style="margin-top: 4px;">${escapeHtml(app.name)}</div>
-                            ${app.team ? `<div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">👥 Team: ${escapeHtml(app.team)}</div>` : ''}
+                            ${app.team ? `<div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">Team: ${escapeHtml(app.team)}</div>` : ''}
                         </div>
                         <button class="arm-node-delete-btn" title="Delete application">✕</button>
                     </div>
@@ -1710,7 +1700,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
             if (app.business_capabilities && app.business_capabilities.length > 0) {
                 const $capsList = $node.find('.arm-capabilities-list');
                 app.business_capabilities.forEach(cap => {
-                    $capsList.append(`<span class="arm-cap-pill">🏷️ ${escapeHtml(cap)}</span>`);
+                    $capsList.append(`<span class="arm-cap-pill">${escapeHtml(cap)}</span>`);
                 });
             }
 
@@ -1720,16 +1710,16 @@ function ARMDiagramStudentView(runtime, element, initData) {
             } else {
                 app.services.forEach(srv => {
                     const $srvItem = $(`
-                        <div class="arm-service-item" data-id="${srv.id}" data-appid="${app.id}" title="Double-click to edit service. Click port ⚬ to connect.">
-                            <div style="display: flex; align-items: center;">
-                                <span class="arm-service-port" title="Connect Service Interface">⚬</span>
-                                <span>🟠 ${escapeHtml(srv.name)}</span>
+                        <div class="arm-service-item" data-id="${srv.id}" data-appid="${app.id}" title="Double-click to edit service. Click port to connect.">
+                            <div class="arm-service-item-main">
+                                <span class="arm-service-circle-port" title="Connect Service Interface"></span>
+                                <span class="arm-service-name">${escapeHtml(srv.name)}</span>
                             </div>
                             <span class="arm-service-badge">${escapeHtml(srv.service_type)}</span>
                         </div>
                     `);
 
-                    $srvItem.find('.arm-service-port').on('click', function(e) {
+                    $srvItem.find('.arm-service-circle-port').on('click', function(e) {
                         e.stopPropagation();
                         if (state.connectMode) {
                             handleConnectServiceClick(app.id, srv.id);
@@ -1768,8 +1758,8 @@ function ARMDiagramStudentView(runtime, element, initData) {
                 app.data_objects.forEach(data => {
                     const $dataItem = $(`
                         <div class="arm-data-item" data-id="${data.id}" data-appid="${app.id}" title="Double-click to edit data object.">
-                            <span>⬡ ${escapeHtml(data.name)}</span>
-                            ${data.classification ? `<small style="color: #fef08a; font-size: 0.7rem; font-weight: 600;">[${escapeHtml(data.classification)}]</small>` : ''}
+                            <span class="arm-data-name">${escapeHtml(data.name)}</span>
+                            ${data.classification ? `<span class="arm-data-class-tag">[${escapeHtml(data.classification)}]</span>` : ''}
                         </div>
                     `);
 
