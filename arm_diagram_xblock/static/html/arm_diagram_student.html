@@ -1,0 +1,384 @@
+<div class="arm-diagram-container" id="arm-xblock-{{ id }}">
+    <div class="arm-header">
+        <h2 class="arm-title"><span class="arm-title-text"></span></h2>
+        <p class="arm-description"></p>
+    </div>
+
+    <div class="arm-status-bar">
+        <div class="arm-status-info">
+            <span>Attempts: <strong class="arm-attempts-used">0</strong> / <strong class="arm-max-attempts">3</strong></span>
+            <span>Score: <strong class="arm-current-score">0.0</strong> / <strong class="arm-max-score">1.0</strong> (<strong class="arm-percentage">0%</strong>)</span>
+            <span class="arm-info-hint"><small style="color: #94a3b8;">💡 Tip: Double-click nodes to edit. Placement hints: <code>at (x, y) size (w, h)</code>.</small></span>
+        </div>
+        <div class="arm-status-badge">
+            <span class="arm-badge arm-badge-pending">Not Submitted</span>
+        </div>
+    </div>
+
+    <!-- Notification / Toast Container -->
+    <div class="arm-toast-container"></div>
+
+    <!-- View Mode Switcher Tabs -->
+    <div class="arm-tabs-header">
+        <button type="button" class="arm-tab-btn arm-tab-active" data-tab="canvas">🎨 Visual Canvas</button>
+        <button type="button" class="arm-tab-btn" data-tab="dsl">📝 ARM DSL Editor</button>
+        <button type="button" class="arm-tab-btn" data-tab="yaml">📄 YAML Editor</button>
+        <button type="button" class="arm-tab-btn" data-tab="upload">📤 Upload Diagram (.arm / .yaml)</button>
+    </div>
+
+    <!-- TAB 1: Visual Canvas View -->
+    <div class="arm-tab-content arm-tab-canvas" data-tab-content="canvas">
+        <div class="arm-toolbar">
+            <button type="button" class="arm-btn arm-btn-primary arm-add-app-btn">+ Add Application</button>
+            <button type="button" class="arm-btn arm-add-service-btn">+ Add Service</button>
+            <button type="button" class="arm-btn arm-add-data-btn">+ Add Data Object</button>
+            <button type="button" class="arm-btn arm-connect-mode-btn" title="Requires at least 2 declared services to connect">➡️ Connect Service Dependency</button>
+            <div style="flex-grow: 1;"></div>
+            <button type="button" class="arm-btn arm-hint-btn">💡 Request Hint</button>
+            <button type="button" class="arm-btn arm-reset-btn">🔄 Reset</button>
+            <button type="button" class="arm-btn arm-btn-success arm-submit-btn">✓ Submit Diagram</button>
+        </div>
+
+        <div class="arm-canvas-wrapper">
+            <svg class="arm-svg-layer" width="100%" height="100%">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#38bdf8" />
+                    </marker>
+                    <marker id="arrowhead-async" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b" />
+                    </marker>
+                    <marker id="arrowhead-selected" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#ec4899" />
+                    </marker>
+                </defs>
+                <g class="arm-svg-connections"></g>
+            </svg>
+            <div class="arm-nodes-layer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: ARM DSL Code Editor -->
+    <div class="arm-tab-content arm-tab-dsl" data-tab-content="dsl" style="display: none;">
+        <div class="arm-code-toolbar">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-weight: 600; color: #38bdf8;">ARM Domain-Specific Language (.arm)</span>
+                <span style="font-size: 0.75rem; color: #64748b; background: #0f172a; padding: 2px 8px; border-radius: 4px; border: 1px solid #334155;">✨ Autocomplete: Type or press Ctrl+Space</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="arm-btn arm-btn-primary arm-apply-dsl-btn">▶ Apply DSL to Canvas</button>
+                <button type="button" class="arm-btn arm-btn-secondary arm-export-dsl-btn">📋 Copy DSL</button>
+            </div>
+        </div>
+        <div class="arm-editor-container" id="arm-dsl-editor-container">
+            <div class="arm-editor-gutter"></div>
+            <div class="arm-editor-surface">
+                <pre class="arm-editor-highlight" aria-hidden="true"><code id="arm-dsl-highlight-code"></code></pre>
+                <textarea id="arm-dsl-textarea" class="arm-editor-input" spellcheck="false" wrap="off"></textarea>
+                <div class="arm-autocomplete-popup" id="arm-dsl-autocomplete" style="display: none;"></div>
+            </div>
+        </div>
+        <div class="arm-dsl-diagnostics" style="display: none;"></div>
+    </div>
+
+    <!-- TAB 3: YAML Code Editor -->
+    <div class="arm-tab-content arm-tab-yaml" data-tab-content="yaml" style="display: none;">
+        <div class="arm-code-toolbar">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-weight: 600; color: #38bdf8;">Structured ARM Specification (.yaml)</span>
+                <span style="font-size: 0.75rem; color: #64748b; background: #0f172a; padding: 2px 8px; border-radius: 4px; border: 1px solid #334155;">✨ Autocomplete: Type or press Ctrl+Space</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="arm-btn arm-btn-primary arm-apply-yaml-btn">▶ Apply YAML to Canvas</button>
+                <button type="button" class="arm-btn arm-btn-secondary arm-export-yaml-btn">📋 Copy YAML</button>
+            </div>
+        </div>
+        <div class="arm-editor-container" id="arm-yaml-editor-container">
+            <div class="arm-editor-gutter"></div>
+            <div class="arm-editor-surface">
+                <pre class="arm-editor-highlight" aria-hidden="true"><code id="arm-yaml-highlight-code"></code></pre>
+                <textarea id="arm-yaml-textarea" class="arm-editor-input" spellcheck="false" wrap="off"></textarea>
+                <div class="arm-autocomplete-popup" id="arm-yaml-autocomplete" style="display: none;"></div>
+            </div>
+        </div>
+        <div class="arm-yaml-diagnostics" style="display: none;"></div>
+    </div>
+
+    <!-- TAB 4: Upload File -->
+    <div class="arm-tab-content arm-tab-upload" data-tab-content="upload" style="display: none;">
+        <div class="arm-upload-dropzone">
+            <div class="arm-upload-icon">📁</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #38bdf8; margin-bottom: 6px;">Upload ARM Diagram File</div>
+            <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px;">Drag and drop a <code>.arm</code> (DSL) or <code>.yaml</code> / <code>.yml</code> file here, or choose file below:</div>
+            <input type="file" id="arm-file-input" accept=".arm,.dsl,.yaml,.yml,.json" style="display: none;" />
+            <button type="button" class="arm-btn arm-btn-primary arm-choose-file-btn">Choose File from Computer</button>
+            <div class="arm-upload-filename" style="margin-top: 12px; font-weight: 600; color: #34d399; display: none;"></div>
+        </div>
+    </div>
+
+    <div class="arm-hint-box" style="display: none;">
+        <strong>Hint:</strong> <span class="arm-hint-text"></span>
+    </div>
+
+    <div class="arm-feedback-section"></div>
+
+    <!-- Modal Dialogs Overlay -->
+    <div class="arm-modal-overlay" style="display: none;">
+        <!-- 1. Add Application Modal -->
+        <div class="arm-modal" id="arm-modal-app" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>📦 Add Application</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-app">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-form-group">
+                    <label for="arm-input-app-name">Application Name: <span class="arm-required">*</span></label>
+                    <input type="text" id="arm-input-app-name" class="arm-form-input" placeholder="e.g. Kaufland Card App, CIDAAS" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-select-app-scope">Application Scope / Maintenance Ownership: <span class="arm-required">*</span></label>
+                    <select id="arm-select-app-scope" class="arm-form-select">
+                        <option value="INTERNAL">Internal Application (Maintained by our Team)</option>
+                        <option value="EXTERNAL">External Application (Maintained by Other Teams / SaaS / 3rd-Party)</option>
+                        <option value="INFRASTRUCTURE">Infrastructure Platform (Shared Middleware / Database)</option>
+                    </select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-select-app-sourcing">Sourcing Strategy / Delivery Type (Optional):</label>
+                    <select id="arm-select-app-sourcing" class="arm-form-select">
+                        <option value="">(Default: Make for Internal, Unset for External)</option>
+                        <option value="MAKE">Make (Built &amp; Developed In-House)</option>
+                        <option value="BUY">Buy (Commercial SaaS / COTS / Vendor)</option>
+                        <option value="USE">Use (Standardized Platform / Shared Service)</option>
+                    </select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-input-app-team">Responsible Team (Optional):</label>
+                    <input type="text" id="arm-input-app-team" class="arm-form-input" placeholder="e.g. Mobile Core, Identity &amp; Access" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-input-app-capabilities">Business Capabilities (Comma-separated, Optional):</label>
+                    <input type="text" id="arm-input-app-capabilities" class="arm-form-input" placeholder="e.g. In-Store Navigation, Loyalty Program" />
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-app">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-app-save-btn">Create Application</button>
+            </div>
+        </div>
+
+        <!-- 2. Edit Application Modal (Double-Click) -->
+        <div class="arm-modal" id="arm-modal-edit-app" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>📦 Application Details &amp; Editor</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-edit-app">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-info-panel" id="arm-edit-app-info"></div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-app-name">Application Name: <span class="arm-required">*</span></label>
+                    <input type="text" id="arm-edit-app-name" class="arm-form-input" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-app-scope">Application Scope / Maintenance Ownership:</label>
+                    <select id="arm-edit-app-scope" class="arm-form-select">
+                        <option value="INTERNAL">Internal Application (Maintained by our Team)</option>
+                        <option value="EXTERNAL">External Application (Maintained by Other Teams / SaaS / 3rd-Party)</option>
+                        <option value="INFRASTRUCTURE">Infrastructure Platform (Shared Middleware / Database)</option>
+                    </select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-app-sourcing">Sourcing Strategy / Delivery Type:</label>
+                    <select id="arm-edit-app-sourcing" class="arm-form-select">
+                        <option value="">(Default: Make for Internal, Unset for External)</option>
+                        <option value="MAKE">Make (Built &amp; Developed In-House)</option>
+                        <option value="BUY">Buy (Commercial SaaS / COTS / Vendor)</option>
+                        <option value="USE">Use (Standardized Platform / Shared Service)</option>
+                    </select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-app-team">Responsible Team:</label>
+                    <input type="text" id="arm-edit-app-team" class="arm-form-input" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-app-capabilities">Business Capabilities (Comma-separated):</label>
+                    <input type="text" id="arm-edit-app-capabilities" class="arm-form-input" />
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-edit-app">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-edit-app-save-btn">Save Changes</button>
+            </div>
+        </div>
+
+        <!-- 3. Add Service Modal -->
+        <div class="arm-modal" id="arm-modal-service" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>🔌 Add Service Interface</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-service">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-modal-target-app">
+                    Target Application: <strong class="arm-target-app-name" style="color: #38bdf8;"></strong>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-input-service-name">Service Name: <span class="arm-required">*</span></label>
+                    <input type="text" id="arm-input-service-name" class="arm-form-input" placeholder="e.g. OAuth API, InStore Navigation" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-select-service-type">Service Interface Type: <span class="arm-required">*</span></label>
+                    <select id="arm-select-service-type" class="arm-form-select">
+                        <option value="REST_API">REST_API (HTTP / JSON API)</option>
+                        <option value="UI">UI (User Interface / Mobile / Web)</option>
+                        <option value="EVENT">EVENT (Message Topic / Kafka / Solace)</option>
+                        <option value="GRAPHQL">GRAPHQL (GraphQL Endpoint)</option>
+                        <option value="GRPC">GRPC (gRPC / Protocol Buffers)</option>
+                        <option value="BATCH">BATCH (Batch / File Ingestion)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-service">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-service-save-btn">Add Service</button>
+            </div>
+        </div>
+
+        <!-- 4. Edit Service Modal (Double-Click) -->
+        <div class="arm-modal" id="arm-modal-edit-service" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>🔌 Edit Service Interface</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-edit-service">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-form-group">
+                    <label for="arm-edit-service-name">Service Name: <span class="arm-required">*</span></label>
+                    <input type="text" id="arm-edit-service-name" class="arm-form-input" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-service-type">Service Type: <span class="arm-required">*</span></label>
+                    <select id="arm-edit-service-type" class="arm-form-select">
+                        <option value="REST_API">REST_API (HTTP / JSON API)</option>
+                        <option value="UI">UI (User Interface / Mobile / Web)</option>
+                        <option value="EVENT">EVENT (Message Topic / Kafka / Solace)</option>
+                        <option value="GRAPHQL">GRAPHQL (GraphQL Endpoint)</option>
+                        <option value="GRPC">GRPC (gRPC / Protocol Buffers)</option>
+                        <option value="BATCH">BATCH (Batch / File Ingestion)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-edit-service">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-edit-service-save-btn">Save Service</button>
+            </div>
+        </div>
+
+        <!-- 5. Add Data Object Modal -->
+        <div class="arm-modal" id="arm-modal-data" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>📊 Add Data Object</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-data">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-modal-target-app">
+                    Target Application: <strong class="arm-target-app-name" style="color: #38bdf8;"></strong>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-input-data-name">Data Object Name: <span class="arm-required">*</span></label>
+                    <input type="text" id="arm-input-data-name" class="arm-form-input" placeholder="e.g. Cart Data, Customer, Order" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-input-data-classification">Classification (Optional):</label>
+                    <select id="arm-input-data-classification" class="arm-form-select">
+                        <option value="Transactional">Transactional (Operational Data)</option>
+                        <option value="Master">Master Data (Core Entity)</option>
+                        <option value="Analytical">Analytical (Telemetry / Logs)</option>
+                        <option value="Reference">Reference / Configuration Data</option>
+                    </select>
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-data">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-data-save-btn">Add Data Object</button>
+            </div>
+        </div>
+
+        <!-- 6. Edit Data Object Modal (Double-Click) -->
+        <div class="arm-modal" id="arm-modal-edit-data" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>📊 Edit Data Object</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-edit-data">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-form-group">
+                    <label for="arm-edit-data-name">Data Object Name: <span class="arm-required">*</span></label>
+                    <input type="text" id="arm-edit-data-name" class="arm-form-input" />
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-edit-data-classification">Classification:</label>
+                    <select id="arm-edit-data-classification" class="arm-form-select">
+                        <option value="Transactional">Transactional (Operational Data)</option>
+                        <option value="Master">Master Data (Core Entity)</option>
+                        <option value="Analytical">Analytical (Telemetry / Logs)</option>
+                        <option value="Reference">Reference / Configuration Data</option>
+                    </select>
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-edit-data">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-edit-data-save-btn">Save Data Object</button>
+            </div>
+        </div>
+
+        <!-- 7. Configure Dependency Connection Modal -->
+        <div class="arm-modal" id="arm-modal-dependency" style="display: none;">
+            <div class="arm-modal-header">
+                <h3>➡️ Configure Service-to-Service Dependency</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-dependency">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <div class="arm-modal-target-app">
+                    <div><strong>Calling Source:</strong> <span class="arm-dep-source-label" style="color: #38bdf8;"></span></div>
+                    <div style="margin-top: 4px;"><strong>Target Provider:</strong> <span class="arm-dep-target-label" style="color: #34d399;"></span></div>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-select-source-service">Calling Originating Service (Optional):</label>
+                    <select id="arm-select-source-service" class="arm-form-select"></select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-select-target-service">Target Consumed Service Interface: <span class="arm-required">*</span></label>
+                    <select id="arm-select-target-service" class="arm-form-select"></select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-select-sync-type">Communication Mode: <span class="arm-required">*</span></label>
+                    <select id="arm-select-sync-type" class="arm-form-select">
+                        <option value="SYNC">SYNC (Synchronous REST / RPC Request-Response)</option>
+                        <option value="ASYNC">ASYNC (Asynchronous Event / Topic / Kafka)</option>
+                    </select>
+                </div>
+                <div class="arm-form-group">
+                    <label for="arm-input-dep-protocol">Protocol / Transport (Optional):</label>
+                    <input type="text" id="arm-input-dep-protocol" class="arm-form-input" placeholder="e.g. HTTPS/REST, Kafka Event, gRPC" />
+                </div>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-dependency">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-primary arm-modal-dep-save-btn">Connect Service</button>
+            </div>
+        </div>
+
+        <!-- 8. Confirm Action Modal -->
+        <div class="arm-modal" id="arm-modal-confirm" style="display: none;">
+            <div class="arm-modal-header">
+                <h3 class="arm-confirm-title" style="color: #f87171;">Confirm Action</h3>
+                <button type="button" class="arm-modal-close-btn" data-modal="arm-modal-confirm">✕</button>
+            </div>
+            <div class="arm-modal-body">
+                <p class="arm-confirm-message" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5;"></p>
+            </div>
+            <div class="arm-modal-footer">
+                <button type="button" class="arm-btn arm-btn-secondary arm-modal-cancel-btn" data-modal="arm-modal-confirm">Cancel</button>
+                <button type="button" class="arm-btn arm-btn-danger arm-modal-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

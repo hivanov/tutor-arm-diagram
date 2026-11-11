@@ -1,0 +1,22 @@
+<div class="arm-studio-wrapper">
+    <div class="arm-studio-field">
+        <label for="arm-display-name">Display Name:</label>
+        <input type="text" id="arm-display-name" class="arm-input" value="ARM Diagram Lab" />
+    </div>
+
+    <div class="arm-studio-field">
+        <label for="arm-weight">Problem Weight (Points):</label>
+        <input type="number" id="arm-weight" class="arm-input" step="0.1" min="0.1" value="1.0" />
+    </div>
+
+    <div class="arm-studio-field">
+        <label for="arm-scenario-json">Scenario & Grading Specification (JSON):</label>
+        <textarea id="arm-scenario-json" class="arm-textarea" rows="18"></textarea>
+        <small class="arm-help-text">Configure required applications, services, data objects, dependencies, forbidden connections, and hints.</small>
+    </div>
+
+    <div class="arm-studio-actions">
+        <button type="button" class="arm-btn arm-btn-primary arm-save-settings-btn">Save Settings</button>
+        <button type="button" class="arm-btn arm-cancel-settings-btn">Cancel</button>
+    </div>
+</div>
