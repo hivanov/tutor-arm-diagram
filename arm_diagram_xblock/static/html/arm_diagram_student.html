@@ -28,11 +28,19 @@
 
     <!-- TAB 1: Visual Canvas View -->
     <div class="arm-tab-content arm-tab-canvas" data-tab-content="canvas">
+        <div class="arm-shape-legend">
+            <span style="font-weight: 700; color: #f8fafc; margin-right: 4px;">ARM Shapes:</span>
+            <span class="arm-legend-item"><span class="arm-legend-shape-app"></span> <strong>Application</strong> (Blue Rounded Rect)</span>
+            <span class="arm-legend-item"><span class="arm-legend-shape-service"></span> <strong>Service</strong> (Orange Circle)</span>
+            <span class="arm-legend-item"><span class="arm-legend-shape-data"></span> <strong>Data Object</strong> (Yellow Hexagon)</span>
+            <span class="arm-legend-item"><span class="arm-legend-shape-dep"></span> <strong>Dependency</strong> (Ocean Blue Parallelogram)</span>
+        </div>
+
         <div class="arm-toolbar">
-            <button type="button" class="arm-btn arm-btn-primary arm-add-app-btn">+ Add Application</button>
-            <button type="button" class="arm-btn arm-add-service-btn">+ Add Service</button>
-            <button type="button" class="arm-btn arm-add-data-btn">+ Add Data Object</button>
-            <button type="button" class="arm-btn arm-connect-mode-btn" title="Requires at least 2 declared services to connect">➡️ Connect Service Dependency</button>
+            <button type="button" class="arm-btn arm-btn-primary arm-add-app-btn">+ 🟦 Add Application</button>
+            <button type="button" class="arm-btn arm-add-service-btn">+ 🟠 Add Service</button>
+            <button type="button" class="arm-btn arm-add-data-btn">+ ⬡ Add Data Object</button>
+            <button type="button" class="arm-btn arm-connect-mode-btn" title="Requires at least 2 declared services to connect">➡️ ▰ Connect Service Dependency</button>
             <div style="flex-grow: 1;"></div>
             <button type="button" class="arm-btn arm-hint-btn">💡 Request Hint</button>
             <button type="button" class="arm-btn arm-reset-btn">🔄 Reset</button>

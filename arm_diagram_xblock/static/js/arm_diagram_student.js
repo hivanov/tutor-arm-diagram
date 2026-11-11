@@ -1530,7 +1530,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
             $(this).text('Click Caller (Source Service/App)...');
             showToast('Click the calling Service/Application, then click the target provider Application.', 'info');
         } else {
-            $(this).text('➡️ Connect Service Dependency');
+            $(this).text('➡️ ▰ Connect Service Dependency');
         }
     });
 
@@ -1567,7 +1567,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
         state.connectMode = false;
         state.connectSourceAppId = null;
         state.connectSourceServiceId = null;
-        $element.find('.arm-connect-mode-btn').removeClass('arm-btn-active').text('➡️ Connect Service Dependency');
+        $element.find('.arm-connect-mode-btn').removeClass('arm-btn-active').text('➡️ ▰ Connect Service Dependency');
         closeModal();
         renderCanvas();
         showToast(`Service dependency connected: '${srcApp ? srcApp.name : "App"}' ➔ '${tgtApp ? tgtApp.name : "App"}' [${syncType}].`, 'success');
@@ -1723,7 +1723,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
                         <div class="arm-service-item" data-id="${srv.id}" data-appid="${app.id}" title="Double-click to edit service. Click port ⚬ to connect.">
                             <div style="display: flex; align-items: center;">
                                 <span class="arm-service-port" title="Connect Service Interface">⚬</span>
-                                <span>🔌 ${escapeHtml(srv.name)}</span>
+                                <span>🟠 ${escapeHtml(srv.name)}</span>
                             </div>
                             <span class="arm-service-badge">${escapeHtml(srv.service_type)}</span>
                         </div>
@@ -1768,8 +1768,8 @@ function ARMDiagramStudentView(runtime, element, initData) {
                 app.data_objects.forEach(data => {
                     const $dataItem = $(`
                         <div class="arm-data-item" data-id="${data.id}" data-appid="${app.id}" title="Double-click to edit data object.">
-                            <span>📊 ${escapeHtml(data.name)}</span>
-                            ${data.classification ? `<small style="color: #cbd5e1; font-size: 0.7rem;">(${escapeHtml(data.classification)})</small>` : ''}
+                            <span>⬡ ${escapeHtml(data.name)}</span>
+                            ${data.classification ? `<small style="color: #fef08a; font-size: 0.7rem; font-weight: 600;">[${escapeHtml(data.classification)}]</small>` : ''}
                         </div>
                     `);
 

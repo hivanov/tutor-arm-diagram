@@ -280,34 +280,95 @@
     border-radius: 12px;
 }
 
-/* Service Item */
+/* ARM Standard Shape Legend Bar */
+.arm-shape-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 6px 14px;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    flex-wrap: wrap;
+}
+
+.arm-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.arm-legend-shape-app {
+    display: inline-block;
+    width: 16px;
+    height: 12px;
+    background: #0f172a;
+    border: 2px solid #38bdf8;
+    border-radius: 3px;
+}
+
+.arm-legend-shape-service {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #ea580c;
+    border: 2px solid #f97316;
+    border-radius: 50%;
+}
+
+.arm-legend-shape-data {
+    display: inline-block;
+    width: 16px;
+    height: 12px;
+    background: #713f12;
+    border: 1px solid #eab308;
+    clip-path: polygon(3px 0%, calc(100% - 3px) 0%, 100% 50%, calc(100% - 3px) 100%, 3px 100%, 0% 50%);
+}
+
+.arm-legend-shape-dep {
+    display: inline-block;
+    width: 16px;
+    height: 12px;
+    background: #0369a1;
+    border: 1px solid #38bdf8;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+
+/* Service Item (ARM Orange Circle / Pill with Port) */
 .arm-service-item {
-    background: #064e3b;
-    border: 1px solid #059669;
-    color: #a7f3d0;
-    padding: 5px 8px;
-    border-radius: 6px;
+    background: #431407;
+    border: 1.5px solid #ea580c;
+    color: #ffedd5;
+    padding: 5px 10px;
+    border-radius: 20px;
     font-size: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     position: relative;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.2);
 }
 
 .arm-service-item:hover {
-    background: #065f46;
-    border-color: #34d399;
+    background: #7c2d12;
+    border-color: #f97316;
+    box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
 }
 
 .arm-service-badge {
-    background: #022c22;
-    padding: 2px 6px;
-    border-radius: 4px;
+    background: #1c0a03;
+    padding: 2px 7px;
+    border-radius: 12px;
     font-size: 0.68rem;
     font-weight: bold;
-    color: #34d399;
+    color: #fb923c;
+    border: 1px solid #9a3412;
 }
 
 .arm-service-port {
@@ -317,9 +378,9 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #0f172a;
-    border: 2px solid #38bdf8;
-    color: #38bdf8;
+    background: #ea580c;
+    border: 2px solid #fed7aa;
+    color: #ffffff;
     font-size: 9px;
     cursor: pointer;
     margin-right: 6px;
@@ -327,27 +388,33 @@
 }
 
 .arm-service-port:hover {
-    background: #38bdf8;
-    color: #0f172a;
-    transform: scale(1.25);
+    background: #ffedd5;
+    color: #ea580c;
+    border-color: #f97316;
+    transform: scale(1.3);
+    box-shadow: 0 0 8px #f97316;
 }
 
-/* Data Object Item */
+/* Data Object Item (ARM Yellow Hexagon) */
 .arm-data-item {
-    background: #451a03;
-    border: 1px solid #d97706;
-    color: #fde68a;
-    padding: 4px 8px;
-    border-radius: 6px;
+    background: #713f12;
+    border: 1.5px solid #eab308;
+    color: #fef08a;
+    padding: 6px 18px;
+    clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0% 50%);
     font-size: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 2px 0;
 }
 
 .arm-data-item:hover {
-    background: #78350f;
+    background: #a16207;
+    border-color: #fde047;
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
 }
 
 /* Scope Badges */
@@ -390,37 +457,43 @@
 
 /* Direct Service-to-Service Dependency Lines */
 .arm-dep-line {
-    stroke: #38bdf8;
+    stroke: #0284c7;
     stroke-width: 2.5;
     fill: none;
     pointer-events: stroke;
     cursor: pointer;
-    transition: stroke-width 0.2s ease;
+    transition: stroke-width 0.2s ease, stroke 0.2s ease;
 }
 
 .arm-dep-line:hover {
     stroke-width: 4;
+    stroke: #38bdf8;
 }
 
+/* Dependency Connector Node (ARM Ocean Blue Parallelogram) */
 .arm-dep-badge {
-    background: #0f172a;
-    border: 1px solid #38bdf8;
-    color: #e2e8f0;
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 12px;
+    background: #0369a1;
+    border: 2px solid #38bdf8;
+    color: #f0f9ff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
     position: absolute;
     transform: translate(-50%, -50%);
     cursor: pointer;
     z-index: 15;
     white-space: nowrap;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    transition: all 0.2s ease;
 }
 
 .arm-dep-badge:hover {
-    border-color: #f59e0b;
-    color: #f59e0b;
+    background: #0284c7;
+    border-color: #7dd3fc;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+    transform: translate(-50%, -50%) scale(1.08);
 }
 
 /* Hint & Feedback Section */
