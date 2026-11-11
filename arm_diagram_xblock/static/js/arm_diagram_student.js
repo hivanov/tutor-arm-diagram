@@ -1710,16 +1710,15 @@ function ARMDiagramStudentView(runtime, element, initData) {
             } else {
                 app.services.forEach(srv => {
                     const $srvItem = $(`
-                        <div class="arm-service-item" data-id="${srv.id}" data-appid="${app.id}" title="Double-click to edit service. Click port to connect.">
-                            <div class="arm-service-item-main">
-                                <span class="arm-service-circle-port" title="Connect Service Interface"></span>
-                                <span class="arm-service-name">${escapeHtml(srv.name)}</span>
+                        <div class="arm-service-circle-node" data-id="${srv.id}" data-appid="${app.id}" title="Service: ${escapeHtml(srv.name)} [${escapeHtml(srv.service_type)}]\nClick to connect dependency\nDouble-click to edit">
+                            <div class="arm-service-circle-content">
+                                <span class="arm-service-circle-name">${escapeHtml(srv.name)}</span>
+                                <span class="arm-service-circle-badge">${escapeHtml(srv.service_type)}</span>
                             </div>
-                            <span class="arm-service-badge">${escapeHtml(srv.service_type)}</span>
                         </div>
                     `);
 
-                    $srvItem.find('.arm-service-circle-port').on('click', function(e) {
+                    $srvItem.on('click', function(e) {
                         e.stopPropagation();
                         if (state.connectMode) {
                             handleConnectServiceClick(app.id, srv.id);
@@ -1843,21 +1842,21 @@ function ARMDiagramStudentView(runtime, element, initData) {
             let x1 = isLeftToRight ? (srcApp.x + srcWidth) : srcApp.x;
             let x2 = isLeftToRight ? tgtApp.x : (tgtApp.x + tgtWidth);
 
-            let y2 = tgtApp.y + 60;
+            let y2 = tgtApp.y + 80;
             if (dep.target_service_id && tgtApp.services && tgtApp.services.length > 0) {
                 const srvIdx = tgtApp.services.findIndex(s => s.id === dep.target_service_id);
                 if (srvIdx >= 0) {
                     const capsOffset = (tgtApp.business_capabilities && tgtApp.business_capabilities.length > 0) ? 35 : 0;
-                    y2 = tgtApp.y + 85 + capsOffset + srvIdx * 34;
+                    y2 = tgtApp.y + 95 + capsOffset + (Math.floor(srvIdx / 3) * 96);
                 }
             }
 
-            let y1 = srcApp.y + 60;
+            let y1 = srcApp.y + 80;
             if (dep.source_service_id && srcApp.services && srcApp.services.length > 0) {
                 const srcIdx = srcApp.services.findIndex(s => s.id === dep.source_service_id);
                 if (srcIdx >= 0) {
                     const capsOffset = (srcApp.business_capabilities && srcApp.business_capabilities.length > 0) ? 35 : 0;
-                    y1 = srcApp.y + 85 + capsOffset + srcIdx * 34;
+                    y1 = srcApp.y + 95 + capsOffset + (Math.floor(srcIdx / 3) * 96);
                 }
             }
 
