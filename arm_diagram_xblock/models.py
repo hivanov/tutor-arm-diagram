@@ -18,8 +18,7 @@ class ServiceType(str, Enum):
 class AppScope(str, Enum):
     """Scope of application ownership from the perspective of the responsible team."""
     INTERNAL = "INTERNAL"  # Maintained by the team
-    EXTERNAL = "EXTERNAL"  # Other teams / 3rd-party / SaaS
-    INFRASTRUCTURE = "INFRASTRUCTURE"  # Shared platform / middleware
+    EXTERNAL = "EXTERNAL"  # Other teams / 3rd-party / SaaS / Platforms
 
 
 class AppSourcing(str, Enum):

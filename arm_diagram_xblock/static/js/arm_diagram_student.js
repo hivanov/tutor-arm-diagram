@@ -337,7 +337,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
             });
 
             // Enum constants and keywords
-            escaped = escaped.replace(/\b(INTERNAL|EXTERNAL|INFRASTRUCTURE|MAKE|BUY|USE|REST_API|UI|EVENT|GRAPHQL|GRPC|BATCH|SYNC|ASYNC|Transactional|Master|Analytical|Reference|true|false|null)\b/g, '<span class="arm-token-enum">$1</span>');
+            escaped = escaped.replace(/\b(INTERNAL|EXTERNAL|MAKE|BUY|USE|REST_API|UI|EVENT|GRAPHQL|GRPC|BATCH|SYNC|ASYNC|Transactional|Master|Analytical|Reference|true|false|null)\b/g, '<span class="arm-token-enum">$1</span>');
 
             // Numbers
             escaped = escaped.replace(/(:\s+)(\d+(\.\d+)?)\b/g, '$1<span class="arm-token-number">$2</span>');
@@ -439,8 +439,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
                 { label: 'applications:', insertText: 'applications:\n  - id: "app_1"\n    name: "Application Name"\n    scope: "INTERNAL"\n    sourcing: "MAKE"\n    team: "Core Team"\n    business_capabilities:\n      - "Capability 1"\n    services:\n      - id: "srv_1"\n        name: "Service Name"\n        service_type: "REST_API"\n    data_objects:\n      - id: "data_1"\n        name: "Data Object"\n        classification: "Transactional"\n    layout:\n      x: 60\n      y: 60\n      width: 270\n      height: 200\n', detail: 'Application list declaration', type: 'Section', icon: '📦' },
                 { label: 'dependencies:', insertText: 'dependencies:\n  - id: "dep_1"\n    source_app_id: "app_1"\n    source_service_id: "srv_1"\n    target_app_id: "app_2"\n    target_service_id: "srv_2"\n    sync_type: "SYNC"\n    protocol: "HTTPS / REST"\n', detail: 'Dependencies list declaration', type: 'Section', icon: '➡️' },
                 { label: 'scope: INTERNAL', insertText: 'scope: "INTERNAL"', detail: 'Internal Owned Application Scope', type: 'Enum', icon: '📦' },
-                { label: 'scope: EXTERNAL', insertText: 'scope: "EXTERNAL"', detail: 'External SaaS / Vendor Scope', type: 'Enum', icon: '☁️' },
-                { label: 'scope: INFRASTRUCTURE', insertText: 'scope: "INFRASTRUCTURE"', detail: 'Infrastructure Platform Scope', type: 'Enum', icon: '⚙️' },
+                { label: 'scope: EXTERNAL', insertText: 'scope: "EXTERNAL"', detail: 'External SaaS / Vendor / Other Team Scope', type: 'Enum', icon: '☁️' },
                 { label: 'sourcing: MAKE', insertText: 'sourcing: "MAKE"', detail: 'In-House Developed (Default for Internal)', type: 'Enum', icon: '🔨' },
                 { label: 'sourcing: BUY', insertText: 'sourcing: "BUY"', detail: 'Commercial SaaS / COTS / Vendor', type: 'Enum', icon: '🛒' },
                 { label: 'sourcing: USE', insertText: 'sourcing: "USE"', detail: 'Standardized Platform / Shared Service', type: 'Enum', icon: '⚡' },

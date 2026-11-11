@@ -469,12 +469,6 @@
     border: 1px solid #3b82f6;
 }
 
-.arm-app-scope-badge.INFRASTRUCTURE {
-    background: #451a03;
-    color: #fde68a;
-    border: 1px solid #d97706;
-}
-
 .arm-app-scope-badge.INTERNAL {
     background: #064e3b;
     color: #6ee7b7;
@@ -484,11 +478,6 @@
 .arm-app-scope-EXTERNAL {
     border: 2px dashed #60a5fa !important;
     background: #111c30 !important;
-}
-
-.arm-app-scope-INFRASTRUCTURE {
-    border: 2px solid #f59e0b !important;
-    background: #1c1917 !important;
 }
 
 /* Direct Service-to-Service Dependency Lines */
