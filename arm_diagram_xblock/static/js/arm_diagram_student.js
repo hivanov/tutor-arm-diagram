@@ -371,9 +371,10 @@ function ARMDiagramStudentView(runtime, element, initData) {
             const dslDictionary = [
                 // Application Snippets with Sourcing Types
                 { label: 'internal application (make)', insertText: 'internal make application "App Name" at (60, 60) size (270, 200) {\n    team: "Core Team"\n    capabilities: "Capability 1"\n    ui service "Main UI"\n    data "Main Data" [Transactional]\n}\n', detail: 'Internal Make Application (In-House Developed)', type: 'Snippet', icon: '📦' },
-                { label: 'internal buy application', insertText: 'internal buy application "App Name" at (60, 60) size (270, 200) {\n    team: "Core Team"\n    capabilities: "Capability 1"\n    ui service "Main UI"\n}\n', detail: 'Internal Buy Application (Commercial / Maintained by Team)', type: 'Snippet', icon: '🛒' },
-                { label: 'internal use application', insertText: 'internal use application "App Name" at (60, 60) size (270, 200) {\n    team: "Core Team"\n    capabilities: "Capability 1"\n    ui service "Main UI"\n}\n', detail: 'Internal Use Application (Platform / Standardized)', type: 'Snippet', icon: '⚡' },
-                { label: 'external application (buy/SaaS)', insertText: 'external buy application "SaaS Name" at (450, 60) size (270, 200) {\n    team: "Vendor / 3rd Party"\n    capabilities: "External Service"\n    rest service "API Endpoint"\n}\n', detail: 'External Buy Application (3rd-Party / SaaS)', type: 'Snippet', icon: '☁️' },
+                { label: 'internal buy application', insertText: 'internal buy application "App Name" at (60, 60) size (270, 200) {\n    team: "Core Team"\n    capabilities: "Capability 1"\n    ui service "Main UI"\n}\n', detail: 'Internal Buy Application (Licensed & Operated Locally/STACKIT by Team)', type: 'Snippet', icon: '🛒' },
+                { label: 'internal use application', insertText: 'internal use application "App Name" at (60, 60) size (270, 200) {\n    team: "Core Team"\n    capabilities: "Capability 1"\n    ui service "Main UI"\n}\n', detail: 'Internal Use Application (SaaS / Shared Platform)', type: 'Snippet', icon: '⚡' },
+                { label: 'external application (buy)', insertText: 'external buy application "Vendor App" at (450, 60) size (270, 200) {\n    team: "Vendor / External Team"\n    capabilities: "Licensed Capability"\n    rest service "API Endpoint"\n}\n', detail: 'External Buy Application (Licensed & Hosted on STACKIT/Premises)', type: 'Snippet', icon: '🛒' },
+                { label: 'external application (use/SaaS)', insertText: 'external use application "SaaS Name" at (450, 60) size (270, 200) {\n    team: "Vendor / 3rd Party"\n    capabilities: "External SaaS Service"\n    rest service "API Endpoint"\n}\n', detail: 'External Use Application (3rd-Party Hosted SaaS, e.g. CIDAAS/Workday)', type: 'Snippet', icon: '☁️' },
                 { label: 'external make application', insertText: 'external make application "Other Team App" at (450, 60) size (270, 200) {\n    team: "Other Team"\n    capabilities: "Other Domain"\n    rest service "API Endpoint"\n}\n', detail: 'External Make Application (Maintained by Another Team)', type: 'Snippet', icon: '🏢' },
                 { label: 'infrastructure application', insertText: 'infrastructure application "Infra Name" at (850, 60) size (270, 200) {\n    team: "Platform Team"\n    capabilities: "Event Distribution"\n    event service "Event Topic"\n}\n', detail: 'Platform / Infrastructure Service', type: 'Snippet', icon: '⚙️' },
                 
@@ -398,8 +399,8 @@ function ARMDiagramStudentView(runtime, element, initData) {
 
                 // Sourcing Keywords
                 { label: 'make', insertText: 'make', detail: 'In-House Built & Developed', type: 'Enum', icon: '🔨' },
-                { label: 'buy', insertText: 'buy', detail: 'Commercial Off-The-Shelf / SaaS', type: 'Enum', icon: '🛒' },
-                { label: 'use', insertText: 'use', detail: 'Standardized Platform / Shared Component', type: 'Enum', icon: '⚡' },
+                { label: 'buy', insertText: 'buy', detail: 'Licensed Commercial Software (Installed Locally / STACKIT)', type: 'Enum', icon: '🛒' },
+                { label: 'use', insertText: 'use', detail: 'Licensed Third-Party SaaS (Vendor Hosted) / Shared Platform', type: 'Enum', icon: '⚡' },
 
                 // Sync / Async Tags
                 { label: 'sync REST', insertText: 'sync REST', detail: 'Synchronous REST Dependency', type: 'Enum', icon: '➡️' },
