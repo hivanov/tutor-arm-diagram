@@ -56,6 +56,27 @@ def test_arm_application_deduplication():
         ARMApplication(id="app1", name="K-App", data_objects=[d1, d2])
 
 
+def test_arm_internal_use_invalid():
+    """Test that combination INTERNAL USE is rejected as an architectural invariant violation."""
+    from arm_diagram_xblock.models import AppScope, AppSourcing
+    
+    # Valid: INTERNAL MAKE
+    app_make = ARMApplication(id="app1", name="Checkout App", scope=AppScope.INTERNAL, sourcing=AppSourcing.MAKE)
+    assert app_make.sourcing == AppSourcing.MAKE
+
+    # Valid: INTERNAL BUY (COTS installed on STACKIT)
+    app_buy = ARMApplication(id="app2", name="Analytics Engine", scope=AppScope.INTERNAL, sourcing=AppSourcing.BUY)
+    assert app_buy.sourcing == AppSourcing.BUY
+
+    # Valid: EXTERNAL USE (SaaS)
+    app_ext_use = ARMApplication(id="app3", name="CIDAAS", scope=AppScope.EXTERNAL, sourcing=AppSourcing.USE)
+    assert app_ext_use.sourcing == AppSourcing.USE
+
+    # Invalid: INTERNAL USE (Contradiction: SaaS is operated externally)
+    with pytest.raises(ValidationError, match="INTERNAL USE"):
+        ARMApplication(id="app4", name="Invalid App", scope=AppScope.INTERNAL, sourcing=AppSourcing.USE)
+
+
 def test_arm_graph_integrity_validation():
     """Test graph validator checks dangling references."""
     app1 = ARMApplication(

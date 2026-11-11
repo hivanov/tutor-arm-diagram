@@ -97,10 +97,14 @@ class ARMApplication(BaseModel):
     height: float = Field(default=200.0, description="Container height")
 
     @model_validator(mode="after")
-    def apply_sourcing_defaults(self) -> "ARMApplication":
+    def apply_sourcing_defaults_and_validate(self) -> "ARMApplication":
         # If internal and sourcing omitted, defaults to MAKE
         if self.scope == AppScope.INTERNAL and self.sourcing is None:
             self.sourcing = AppSourcing.MAKE
+        if self.scope == AppScope.INTERNAL and self.sourcing == AppSourcing.USE:
+            raise ValueError(
+                "Invalid architectural combination 'INTERNAL USE': Software sourced as USE (SaaS) is operated by external providers and must have scope EXTERNAL."
+            )
         return self
 
     @field_validator("name")

@@ -763,14 +763,17 @@ function ARMDiagramStudentView(runtime, element, initData) {
             }
 
             // Application block start:
-            // (internal|external|infrastructure)? (make|buy|use)? application "Name" [at (x,y)] [size (w,h)] {
-            const appHeaderMatch = line.match(/^(?:(internal|external|infrastructure)\s+)?(?:(make|buy|use)\s+)?application\s+"([^"]+)"(?:\s*at\s*\(\s*(\d+)\s*,\s*(\d+)\s*\))?(?:\s*size\s*\(\s*(\d+)\s*,\s*(\d+)\s*\))?\s*\{/i);
+            // (internal|external)? (make|buy|use)? application "Name" [at (x,y)] [size (w,h)] {
+            const appHeaderMatch = line.match(/^(?:(internal|external)\s+)?(?:(make|buy|use)\s+)?application\s+"([^"]+)"(?:\s*at\s*\(\s*(\d+)\s*,\s*(\d+)\s*\))?(?:\s*size\s*\(\s*(\d+)\s*,\s*(\d+)\s*\))?\s*\{/i);
             if (appHeaderMatch) {
                 if (currentApp) {
                     throw new Error(`Line ${lineNum}: Nested applications are not allowed. Missing closing '}' for '${currentApp.name}'.`);
                 }
                 const scopeRaw = (appHeaderMatch[1] || 'internal').toUpperCase();
                 const sourcingRaw = appHeaderMatch[2] ? appHeaderMatch[2].toUpperCase() : (scopeRaw === 'INTERNAL' ? 'MAKE' : null);
+                if (scopeRaw === 'INTERNAL' && sourcingRaw === 'USE') {
+                    throw new Error(`Line ${lineNum}: Invalid architectural combination 'internal use'. Software sourced as USE (SaaS) is operated by external vendors and must be declared as 'external use'.`);
+                }
                 const appName = appHeaderMatch[3];
                 const posX = appHeaderMatch[4] ? parseInt(appHeaderMatch[4], 10) : (60 + (applications.length % 3) * 290);
                 const posY = appHeaderMatch[5] ? parseInt(appHeaderMatch[5], 10) : (60 + Math.floor(applications.length / 3) * 230);
@@ -855,7 +858,11 @@ function ARMDiagramStudentView(runtime, element, initData) {
                 // Sourcing property override (e.g. sourcing: "BUY")
                 const srcMatch = line.match(/^sourcing\s*:\s*"?(MAKE|BUY|USE)"?/i);
                 if (srcMatch) {
-                    currentApp.sourcing = srcMatch[1].toUpperCase();
+                    const srcVal = srcMatch[1].toUpperCase();
+                    if (currentApp.scope === 'INTERNAL' && srcVal === 'USE') {
+                        throw new Error(`Line ${lineNum}: Invalid combination 'sourcing: USE' for INTERNAL application '${currentApp.name}'. Software sourced as USE (SaaS) must be EXTERNAL.`);
+                    }
+                    currentApp.sourcing = srcVal;
                     continue;
                 }
 
@@ -1135,7 +1142,11 @@ function ARMDiagramStudentView(runtime, element, initData) {
                     }
                 } else if (trimmed.startsWith('sourcing:')) {
                     const s = cleanYamlVal(trimmed.substring(9));
-                    currentApp.sourcing = (s === 'null' || !s) ? (currentApp.scope === 'INTERNAL' ? 'MAKE' : null) : s.toUpperCase();
+                    const parsedSourcing = (s === 'null' || !s) ? (currentApp.scope === 'INTERNAL' ? 'MAKE' : null) : s.toUpperCase();
+                    if (currentApp.scope === 'INTERNAL' && parsedSourcing === 'USE') {
+                        throw new Error(`Line ${lineIdx + 1}: Invalid combination 'sourcing: USE' for INTERNAL application '${currentApp.name}'. SaaS software must have scope EXTERNAL.`);
+                    }
+                    currentApp.sourcing = parsedSourcing;
                 } else if (trimmed.startsWith('team:')) {
                     const t = cleanYamlVal(trimmed.substring(5));
                     currentApp.team = (t === 'null' || !t) ? null : t;
@@ -1299,6 +1310,29 @@ function ARMDiagramStudentView(runtime, element, initData) {
         }
     }
 
+    // Helper to dynamically adjust sourcing options based on scope
+    function syncSourcingDropdown(scopeSelectId, sourcingSelectId) {
+        const scope = $element.find('#' + scopeSelectId).val();
+        const $sourcing = $element.find('#' + sourcingSelectId);
+        const $useOption = $sourcing.find('option[value="USE"]');
+        if (scope === 'INTERNAL') {
+            $useOption.prop('disabled', true).text('Use (Invalid for Internal - SaaS is External)');
+            if ($sourcing.val() === 'USE') {
+                $sourcing.val('MAKE');
+            }
+        } else {
+            $useOption.prop('disabled', false).text('Use (SaaS / Shared Platform Service)');
+        }
+    }
+
+    $element.find('#arm-select-app-scope').on('change', function() {
+        syncSourcingDropdown('arm-select-app-scope', 'arm-select-app-sourcing');
+    });
+
+    $element.find('#arm-edit-app-scope').on('change', function() {
+        syncSourcingDropdown('arm-edit-app-scope', 'arm-edit-app-sourcing');
+    });
+
     // -------------------------------------------------------------
     // UI Modal Dialog Actions
     // -------------------------------------------------------------
@@ -1307,6 +1341,7 @@ function ARMDiagramStudentView(runtime, element, initData) {
         $element.find('#arm-input-app-name').val('');
         $element.find('#arm-select-app-scope').val('INTERNAL');
         $element.find('#arm-select-app-sourcing').val('');
+        syncSourcingDropdown('arm-select-app-scope', 'arm-select-app-sourcing');
         $element.find('#arm-input-app-team').val('');
         $element.find('#arm-input-app-capabilities').val('');
         openModal('arm-modal-app');
@@ -1324,6 +1359,11 @@ function ARMDiagramStudentView(runtime, element, initData) {
         if (!appName) {
             showToast('Please enter an application name.', 'warning');
             $element.find('#arm-input-app-name').focus();
+            return;
+        }
+
+        if (appScope === 'INTERNAL' && appSourcing === 'USE') {
+            showToast("Invalid combination 'INTERNAL USE': Software sourced as USE (SaaS) is operated by external vendors and must have scope EXTERNAL.", 'error');
             return;
         }
 
@@ -1368,6 +1408,11 @@ function ARMDiagramStudentView(runtime, element, initData) {
 
         if (!newName) {
             showToast('Application name cannot be empty.', 'warning');
+            return;
+        }
+
+        if (newScope === 'INTERNAL' && newSourcing === 'USE') {
+            showToast("Invalid combination 'INTERNAL USE': Software sourced as USE (SaaS) is operated by external vendors and must have scope EXTERNAL.", 'error');
             return;
         }
 
