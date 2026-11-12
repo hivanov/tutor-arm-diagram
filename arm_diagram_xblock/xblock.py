@@ -378,7 +378,7 @@ class ARMDiagramXBlock(XBlock):
         # Child elements / inline payload
         for child in node:
             tag = child.tag.lower()
-            if tag in ("scenario", "scenario_json") and child.text and child.text.strip():
+            if tag in ("scenario", "scenario_json", "scenario_data") and child.text and child.text.strip():
                 try:
                     # Validate JSON
                     parsed = json.loads(child.text.strip())
